@@ -69,7 +69,7 @@ export function FraudDNA() {
             <CardDescription>Weighted contribution of individual scoring models to the final result</CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[300px]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[600px] md:h-[300px]">
                <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#3f3f46" />

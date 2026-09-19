@@ -90,8 +90,8 @@ export function JourneyReplay() {
               </div>
             )}
           </div>
-          <CardContent className="p-4 bg-zinc-950 flex items-center justify-between">
-             <div className="flex items-center gap-4">
+          <CardContent className="p-4 bg-zinc-950 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
+             <div className="flex items-center gap-4 w-full sm:w-auto justify-center">
                <SkipBack className="w-5 h-5 text-white/70 cursor-pointer hover:text-white" onClick={() => { setCurrentIndex(0); setIsPlaying(false); }} />
                {isPlaying ? (
                  <PauseCircle className="w-8 h-8 text-white cursor-pointer" onClick={() => setIsPlaying(false)} />
@@ -100,7 +100,7 @@ export function JourneyReplay() {
                )}
                <FastForward className="w-5 h-5 text-white/70 cursor-pointer hover:text-white" onClick={() => { setCurrentIndex(events.length - 1); setIsPlaying(false); }} />
              </div>
-             <div className="flex-1 px-8">
+             <div className="flex-1 px-2 sm:px-8 w-full">
                <div className="h-2 w-full bg-white/20 rounded-full relative overflow-hidden">
                   <div 
                     className="absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-300 ease-linear"
@@ -108,7 +108,7 @@ export function JourneyReplay() {
                   />
                </div>
              </div>
-             <div className="text-sm font-mono text-white/70 w-32 text-right">
+             <div className="text-sm font-mono text-white/70 w-full sm:w-32 text-center sm:text-right">
                Event {currentIndex + 1} / {events.length}
              </div>
           </CardContent>

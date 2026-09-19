@@ -37,15 +37,15 @@ export function InvestigationMode() {
              <AlertTriangle className="w-4 h-4" /> Recommended Action: {riskResult.recommendedAction}
           </p>
         </div>
-        <div className="flex flex-col items-end gap-3">
-          <div className="flex flex-wrap gap-2 justify-end">
+        <div className="flex flex-col items-start md:items-end gap-3 mt-4 md:mt-0">
+          <div className="flex flex-wrap gap-2 justify-start md:justify-end">
             <Button variant="outline" size="sm" onClick={() => navigate('/fraud-dna')}>View Fraud DNA</Button>
             <Button variant="outline" size="sm" onClick={() => navigate('/transactions')}>View Transaction Context</Button>
             <Button variant="outline" size="sm" onClick={() => navigate('/analyze')}>Scam Analyzer</Button>
           </div>
-          <div className="flex gap-2">
-             <Button variant="secondary" onClick={() => navigate('/dashboard')}>Back to Dashboard</Button>
-             <Button variant="destructive" className="gap-2 shadow-lg shadow-destructive/20">
+          <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+             <Button variant="secondary" className="flex-1" onClick={() => navigate('/dashboard')}>Back to Dashboard</Button>
+             <Button variant="destructive" className="flex-1 gap-2 shadow-lg shadow-destructive/20">
                <Lock className="w-4 h-4" /> {riskResult.recommendedAction.split('/')[0].trim() || 'Execute Action'}
              </Button>
           </div>

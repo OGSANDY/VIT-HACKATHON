@@ -36,7 +36,7 @@ export function FraudNetwork() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto animate-in fade-in duration-500 h-full flex flex-col">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
             <Network className="h-8 w-8 text-primary" />
@@ -46,8 +46,8 @@ export function FraudNetwork() {
             Graph visualization of entities and transaction flows linked to Case {demonstrationCase.caseId}.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="relative w-64">
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <div className="relative flex-1 md:w-64">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <input
               type="text"
@@ -55,7 +55,7 @@ export function FraudNetwork() {
               className="w-full bg-muted/50 border border-border rounded-md pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
-          <Button variant="outline" className="gap-2"><Filter className="w-4 h-4"/> Filter</Button>
+          <Button variant="outline" className="gap-2 shrink-0"><Filter className="w-4 h-4"/> Filter</Button>
         </div>
       </div>
 
@@ -118,14 +118,14 @@ export function FraudNetwork() {
                 </motion.div>
               ))}
 
-              <div className="absolute bottom-4 left-4 flex gap-4 bg-background/80 p-3 rounded-lg border backdrop-blur-sm text-xs font-medium">
-                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-destructive"></div> Critical Node</div>
-                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-warning"></div> High Risk</div>
-                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-[#eab308]"></div> Monitored</div>
+              <div className="absolute bottom-4 left-4 right-4 sm:right-auto flex flex-wrap gap-2 sm:gap-4 bg-background/80 p-3 rounded-lg border backdrop-blur-sm text-xs font-medium z-20">
+                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-destructive shrink-0"></div> Critical Node</div>
+                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-warning shrink-0"></div> High Risk</div>
+                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-[#eab308] shrink-0"></div> Monitored</div>
               </div>
-              <div className="absolute top-4 right-4 flex gap-4 bg-background/80 p-3 rounded-lg border backdrop-blur-sm text-xs font-medium shadow-sm">
+              <div className="absolute top-4 right-4 left-4 sm:left-auto flex flex-wrap gap-2 sm:gap-4 bg-background/80 p-3 rounded-lg border backdrop-blur-sm text-xs font-medium shadow-sm z-20">
                  <div className="flex items-center gap-2 font-bold text-destructive">
-                   <Network className="w-4 h-4" /> Unified Engine Network Risk: {networkRiskScore}/100
+                   <Network className="w-4 h-4 shrink-0" /> Unified Engine Network Risk: {networkRiskScore}/100
                  </div>
               </div>
            </CardContent>

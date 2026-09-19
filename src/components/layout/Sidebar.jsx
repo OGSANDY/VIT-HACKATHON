@@ -13,7 +13,8 @@ import {
   BellRing, 
   Activity, 
   Settings,
-  ShieldCheck
+  ShieldCheck,
+  X
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -35,14 +36,21 @@ const systemItems = [
   { name: 'Settings', to: '/settings', icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isOpen, onClose }) {
   return (
-    <aside className="w-64 border-r bg-card h-full flex flex-col shadow-sm relative z-20">
-      <div className="h-16 flex items-center px-6 border-b">
+    <aside className={cn(
+      "w-64 border-r bg-card h-full flex flex-col shadow-sm z-30 transition-transform duration-300 ease-in-out",
+      "fixed inset-y-0 left-0 md:relative md:translate-x-0",
+      isOpen ? "translate-x-0" : "-translate-x-full"
+    )}>
+      <div className="h-16 flex items-center justify-between px-6 border-b shrink-0">
         <div className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight">
           <ShieldCheck className="h-8 w-8" />
           ScamShield
         </div>
+        <button onClick={onClose} className="md:hidden text-muted-foreground hover:text-foreground">
+          <X className="h-6 w-6" />
+        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto py-4">
@@ -51,6 +59,7 @@ export function Sidebar() {
             <NavLink
               key={item.name}
               to={item.to}
+              onClick={onClose}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
@@ -71,6 +80,7 @@ export function Sidebar() {
             <NavLink
               key={item.name}
               to={item.to}
+              onClick={onClose}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",

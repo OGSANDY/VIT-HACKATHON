@@ -19,7 +19,7 @@ export function ActiveInvestigationCard() {
     <Card className="border-destructive/30 bg-destructive/5 shadow-md relative overflow-hidden">
       <div className="absolute top-0 left-0 w-1 h-full bg-destructive animate-pulse"></div>
       
-      <CardHeader className="pb-3 flex flex-row items-start justify-between">
+      <CardHeader className="pb-3 flex flex-col sm:flex-row items-start justify-between gap-4 sm:gap-0">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-bold text-destructive tracking-widest uppercase">Investigation</span>
