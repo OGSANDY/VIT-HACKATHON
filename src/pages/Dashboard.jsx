@@ -9,10 +9,24 @@ import { IntelligenceSphere } from '../components/3d/IntelligenceSphere';
 export function Dashboard() {
   return (
     <div className="space-y-6 pb-8 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Fraud Intelligence Center</h1>
-          <p className="text-muted-foreground mt-1">Real-time visibility into scam-in-progress activity.</p>
+      <div className="relative overflow-hidden rounded-2xl border border-primary/10 bg-white/50 backdrop-blur-sm p-8 shadow-sm">
+        {/* Subtle Hero Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-grid-pattern opacity-10 pointer-events-none [mask-image:linear-gradient(to_left,white,transparent)]" />
+        
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold tracking-widest uppercase mb-4 border border-primary/20">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              Live Telemetry Active
+            </div>
+            <h1 className="text-4xl font-black tracking-tight text-slate-900 drop-shadow-sm">Fraud Intelligence Center</h1>
+            <p className="text-slate-600 mt-2 text-lg font-medium">Contextual visibility into simulated scam-in-progress activity.</p>
+          </div>
         </div>
       </div>
       

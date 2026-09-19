@@ -29,7 +29,7 @@ export function Beneficiaries() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-muted-foreground uppercase bg-muted/50 border-b">
                 <tr>
-                  <th className="px-6 py-4 font-semibold">Account Number</th>
+                  <th className="px-6 py-4 font-semibold">Beneficiary / Account</th>
                   <th className="px-6 py-4 font-semibold">Bank / IFSC</th>
                   <th className="px-6 py-4 font-semibold">Added By</th>
                   <th className="px-6 py-4 font-semibold">Mule Probability</th>
@@ -38,7 +38,7 @@ export function Beneficiaries() {
               </thead>
               <tbody className="divide-y divide-border">
                 <tr className="hover:bg-muted/20 transition-colors">
-                  <td className="px-6 py-4 font-medium text-foreground">XXXX-XXXX-9921</td>
+                  <td className="px-6 py-4 font-medium text-foreground">Rahul Sharma<br/><span className="text-xs text-muted-foreground font-mono">XXXX-XXXX-9921</span></td>
                   <td className="px-6 py-4">HDFC Bank<br/><span className="text-xs text-muted-foreground">HDFC0001234</span></td>
                   <td className="px-6 py-4">Arun Kumar (2 mins ago)</td>
                   <td className="px-6 py-4 text-destructive font-bold">89%</td>

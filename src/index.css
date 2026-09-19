@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* Premium Light Theme - Ivory/Neutral background, deep navy text, emerald accents */
-    --background: 210 20% 98%; /* #f8f9fa soft ivory/neutral */
+    --background: 215 20% 94%; /* Cool slate gray for better contrast with white cards */
     --foreground: 222 47% 11%; /* #0f172a deep navy */
     
     --card: 0 0% 100%; /* #ffffff */
@@ -44,7 +44,25 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply text-foreground font-sans antialiased relative;
+    background-color: hsl(215 25% 96%); /* Premium light slate base fallback */
+    background-image: url('/bg-intelligence.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.85); /* Light translucent overlay for readability */
+    z-index: -1;
+    pointer-events: none;
   }
 }
 
@@ -56,14 +74,17 @@
   z-index: 10;
 }
 
-/* Fraud Detection Cyber Grid Pattern */
+/* Premium Intelligence Grid Pattern */
 .bg-grid-pattern {
   background-image: 
+    radial-gradient(hsl(215 30% 60% / 0.25) 1px, transparent 1px),
+    radial-gradient(hsl(215 30% 60% / 0.25) 1px, transparent 1px),
     linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px),
     linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, black, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
+  background-size: 20px 20px, 20px 20px, 80px 80px, 80px 80px;
+  background-position: 0 0, 10px 10px, 0 0, 0 0;
+  mask-image: radial-gradient(ellipse at center, black, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 90%);
 }
 
 .animate-scan {

@@ -17,7 +17,7 @@ export function Alerts() {
           <BellRing className="h-8 w-8 text-primary" />
           Global Alerts
         </h1>
-        <p className="text-muted-foreground mt-2">Real-time notifications from the Unified Risk Engine.</p>
+        <p className="text-muted-foreground mt-2">Demonstration alerts generated from the Unified Risk Engine.</p>
       </div>
 
       <div className="space-y-4">

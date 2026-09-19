@@ -15,12 +15,22 @@ const NAVIGATION = [
 
 export function AppLayout() {
   return (
-    <div className="flex h-screen bg-background overflow-hidden text-foreground relative">
-      <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
+    <div className="flex h-screen bg-slate-50 overflow-hidden text-foreground relative">
+      {/* Primary Global Background Image */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none" 
+        style={{ backgroundImage: "url('/bg-intelligence.jpg')" }} 
+      />
+      {/* Light Translucent Overlay for readability */}
+      <div className="fixed inset-0 z-0 bg-white/85 pointer-events-none" />
+      
+      {/* Optional: Preserve existing faint grid overlay over the image if needed */}
+      <div className="fixed inset-0 bg-grid-pattern opacity-[0.05] pointer-events-none z-0" />
+      
       <Sidebar navigation={NAVIGATION} />
-      <div className="flex flex-col flex-1 overflow-hidden z-10">
+      <div className="flex flex-col flex-1 overflow-hidden z-10 relative">
         <Topbar />
-        <main className="flex-1 overflow-y-auto p-6 bg-[#fbfbfc]">
+        <main className="flex-1 overflow-y-auto p-6 bg-transparent relative z-10">
           <Outlet />
         </main>
       </div>

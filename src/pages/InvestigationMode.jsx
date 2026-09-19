@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { evaluateRisk } from '../engine/riskEngine';
+import { demonstrationCase } from '../data/scamCase';
 
 // Fix for default leaflet icons in React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -18,22 +20,35 @@ L.Icon.Default.mergeOptions({
 
 export function InvestigationMode() {
   const navigate = useNavigate();
+  const riskResult = evaluateRisk(demonstrationCase);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto animate-in fade-in duration-500 pb-10">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">Investigation Workspace</h1>
-            <Badge variant="destructive" className="animate-pulse">CRITICAL ACTIVE</Badge>
+            <Badge variant={riskResult.riskLevel === 'CRITICAL' ? 'destructive' : riskResult.riskLevel === 'HIGH' ? 'warning' : 'outline'} className="animate-pulse">
+              {riskResult.riskLevel} ACTIVE
+            </Badge>
           </div>
-          <p className="text-muted-foreground">Case ID: #SCM-2048 • Customer: Arun Kumar • Amount: ₹85,000</p>
+          <p className="text-muted-foreground">Case ID: #{demonstrationCase.caseId} • Customer: {demonstrationCase.customer.name} ({demonstrationCase.customer.customerId}) • Amount: ₹{demonstrationCase.transaction.amount.toLocaleString('en-IN')}</p>
+          <p className="text-sm font-semibold mt-2 text-destructive flex items-center gap-2">
+             <AlertTriangle className="w-4 h-4" /> Recommended Action: {riskResult.recommendedAction}
+          </p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={() => navigate('/dashboard')}>Back to Dashboard</Button>
-          <Button variant="destructive" className="gap-2 shadow-lg shadow-destructive/20">
-            <Lock className="w-4 h-4" /> Freeze Account Now
-          </Button>
+        <div className="flex flex-col items-end gap-3">
+          <div className="flex flex-wrap gap-2 justify-end">
+            <Button variant="outline" size="sm" onClick={() => navigate('/fraud-dna')}>View Fraud DNA</Button>
+            <Button variant="outline" size="sm" onClick={() => navigate('/transactions')}>View Transaction Context</Button>
+            <Button variant="outline" size="sm" onClick={() => navigate('/analyze')}>Scam Analyzer</Button>
+          </div>
+          <div className="flex gap-2">
+             <Button variant="secondary" onClick={() => navigate('/dashboard')}>Back to Dashboard</Button>
+             <Button variant="destructive" className="gap-2 shadow-lg shadow-destructive/20">
+               <Lock className="w-4 h-4" /> {riskResult.recommendedAction.split('/')[0].trim() || 'Execute Action'}
+             </Button>
+          </div>
         </div>
       </div>
 
@@ -41,65 +56,39 @@ export function InvestigationMode() {
         
         {/* Left Column: Scam DNA & Signals */}
         <div className="lg:col-span-1 space-y-6">
-          <Card className="border-destructive/30 bg-destructive/5 shadow-md">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-destructive flex items-center gap-2 text-lg">
-                <Fingerprint className="w-5 h-5" /> Scam DNA Profiler
+          <Card className="border-border/50 shadow-md">
+            <CardHeader className="pb-3 bg-muted/20 border-b">
+              <CardTitle className="text-foreground flex items-center justify-between text-lg">
+                 <div className="flex items-center gap-2">
+                   <Fingerprint className="w-5 h-5 text-primary" /> Unified Risk Engine
+                 </div>
+                 <Badge variant="outline" className="text-[10px]">Deterministic Evaluation</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-4 bg-background rounded-lg border">
-                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-widest mb-1">Detected Pattern</p>
-                <p className="text-lg font-bold text-foreground">Digital Arrest Impersonation</p>
+            <CardContent className="space-y-4 pt-4">
+              <div className={`p-4 bg-background rounded-lg border ${riskResult.riskLevel === 'CRITICAL' ? 'border-destructive/30 bg-destructive/5' : ''}`}>
+                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-widest mb-1">Detected Scam Pattern</p>
+                <p className="text-lg font-bold text-foreground">{demonstrationCase.scamType}</p>
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-destructive w-[94%]" />
+                    <div className={`h-full w-[${riskResult.totalScore}%] ${riskResult.riskLevel === 'CRITICAL' ? 'bg-destructive' : 'bg-warning'}`} style={{width: `${riskResult.totalScore}%`}} />
                   </div>
-                  <span className="text-sm font-bold text-destructive">94% Match</span>
+                  <span className={`text-sm font-bold ${riskResult.riskLevel === 'CRITICAL' ? 'text-destructive' : 'text-warning'}`}>{riskResult.totalScore}/100 Match</span>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold text-muted-foreground mt-4 mb-3 uppercase tracking-wider">Trigger Signals</h4>
+              <div className="space-y-3">
+                <h4 className="text-sm font-semibold text-muted-foreground mt-4 uppercase tracking-wider">Engine Risk Factors</h4>
                 
-                <div className="flex items-center justify-between p-3 bg-background border rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center">
-                      <PhoneCall className="w-4 h-4 text-destructive" />
+                {riskResult.factors.map((f, i) => (
+                  <div key={i} className="flex flex-col justify-between p-3 bg-background border rounded-lg gap-2">
+                    <div className="flex justify-between items-center">
+                      <p className="text-sm font-semibold text-foreground">{f.name}</p>
+                      <Badge variant={f.score > 70 ? 'destructive' : f.score > 40 ? 'warning' : 'outline'} className="text-[10px]">{f.score}/100</Badge>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold">Active Voice Call</p>
-                      <p className="text-xs text-muted-foreground">Duration: 42 mins</p>
-                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{f.explanation}</p>
                   </div>
-                  <Badge variant="destructive" className="text-[10px]">CRITICAL</Badge>
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-background border rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-warning/10 flex items-center justify-center">
-                      <Smartphone className="w-4 h-4 text-warning" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold">Screen Sharing App</p>
-                      <p className="text-xs text-muted-foreground">AnyDesk detected</p>
-                    </div>
-                  </div>
-                  <Badge variant="warning" className="text-[10px]">HIGH</Badge>
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-background border rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-warning/10 flex items-center justify-center">
-                      <Network className="w-4 h-4 text-warning" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold">New Beneficiary</p>
-                      <p className="text-xs text-muted-foreground">Added 2 mins ago</p>
-                    </div>
-                  </div>
-                  <Badge variant="warning" className="text-[10px]">HIGH</Badge>
-                </div>
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -203,7 +192,7 @@ export function InvestigationMode() {
                   </div>
                   <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-destructive/10 border border-destructive/30 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-destructive">₹85,000 Transfer Blocked</span>
+                      <span className="font-bold text-destructive">₹{demonstrationCase.transaction.amount.toLocaleString('en-IN')} Transfer Blocked</span>
                       <time className="text-xs text-destructive">10:48 AM</time>
                     </div>
                     <p className="text-sm text-foreground font-medium mb-2">ScamShield intervened.</p>

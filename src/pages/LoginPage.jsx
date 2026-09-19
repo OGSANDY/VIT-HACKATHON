@@ -28,7 +28,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex relative overflow-hidden">
+    <div className="min-h-screen bg-transparent flex relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-50 animate-scan pointer-events-none" />
@@ -51,7 +51,7 @@ export function LoginPage() {
             Fraud Intelligence & Prevention Core
           </h2>
           <p className="text-slate-800 font-bold text-lg drop-shadow-md bg-white/50 p-4 rounded-xl backdrop-blur-sm border border-white/60">
-            Authorized Personnel Only. This system monitors live banking telemetry to detect and intercept psychological manipulation and financial fraud.
+            Authorized Personnel Only. Simulated banking telemetry for contextual fraud investigation.
           </p>
         </div>
       </div>

@@ -40,7 +40,8 @@ export function Sidebar() {
     <aside className="w-64 border-r bg-card h-full flex flex-col shadow-sm relative z-20">
       <div className="h-16 flex items-center px-6 border-b">
         <div className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight">
-          <img src="/logo.png" alt="ScamShield" className="h-8 object-contain" />
+          <ShieldCheck className="h-8 w-8" />
+          ScamShield
         </div>
       </div>
 

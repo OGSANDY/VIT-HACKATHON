@@ -23,6 +23,8 @@ export default {
         accentForeground: "hsl(var(--accent-foreground))",
         destructive: "hsl(var(--destructive))",
         destructiveForeground: "hsl(var(--destructive-foreground))",
+        warning: "hsl(var(--warning))",
+        warningForeground: "hsl(var(--warning-foreground))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -3,40 +3,24 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../co
 import { Network, Search, AlertTriangle, ShieldCheck, UserX, Building2, Landmark, Filter } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
-// Using framer-motion to create an animated SVG network graph
 import { motion } from 'framer-motion';
+import { demonstrationCase } from '../data/scamCase';
+import { evaluateRisk } from '../engine/riskEngine';
 
-const nodes = [
-  { id: '1', type: 'target', label: 'Arun Kumar', risk: 'critical', x: 50, y: 50 },
-  { id: '2', type: 'mule', label: 'Beneficiary A', risk: 'high', x: 30, y: 30 },
-  { id: '3', type: 'mule', label: 'Beneficiary B', risk: 'high', x: 70, y: 30 },
-  { id: '4', type: 'hub', label: 'Crypto Exchange', risk: 'critical', x: 50, y: 15 },
-  { id: '5', type: 'bank', label: 'Foreign Bank', risk: 'medium', x: 20, y: 15 },
-  { id: '6', type: 'bank', label: 'Offshore Trust', risk: 'medium', x: 80, y: 15 },
-  { id: '7', type: 'mule', label: 'Beneficiary C', risk: 'high', x: 50, y: 75 },
-  { id: '8', type: 'mule', label: 'Beneficiary D', risk: 'warning', x: 70, y: 70 },
-  { id: '9', type: 'mule', label: 'Beneficiary E', risk: 'warning', x: 30, y: 70 },
-];
-
-const edges = [
-  { source: '1', target: '2', amount: '₹85k (Blocked)' },
-  { source: '1', target: '3', amount: '₹12k' },
-  { source: '2', target: '4', amount: '₹85k' },
-  { source: '3', target: '4', amount: '₹12k' },
-  { source: '4', target: '5', amount: '₹40k' },
-  { source: '4', target: '6', amount: '₹57k' },
-  { source: '1', target: '7', amount: '₹5k' },
-  { source: '7', target: '8', amount: '₹2k' },
-  { source: '7', target: '9', amount: '₹3k' },
-];
+const nodes = demonstrationCase.network.nodes;
+const edges = demonstrationCase.network.relationships;
 
 export function FraudNetwork() {
   const [activeNode, setActiveNode] = useState(nodes[0]);
+  const riskResult = evaluateRisk(demonstrationCase);
+  const networkFactor = riskResult.factors.find(f => f.name.toLowerCase().includes('network'));
+  const networkRiskScore = networkFactor ? networkFactor.score : 0;
 
   const getNodeColor = (type, risk) => {
     if (risk === 'critical') return '#ef4444'; // destructive
     if (risk === 'high') return '#f97316'; // warning
     if (risk === 'medium') return '#eab308';
+    if (risk === 'warning') return '#eab308';
     return '#10b981'; // primary
   };
 
@@ -56,10 +40,10 @@ export function FraudNetwork() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-3">
             <Network className="h-8 w-8 text-primary" />
-            Fraud Syndicate Network
+            Case Investigation Network
           </h1>
           <p className="text-muted-foreground mt-2">
-            Graph visualization of money mule accounts and transaction flows linked to ScamShield investigations.
+            Graph visualization of entities and transaction flows linked to Case {demonstrationCase.caseId}.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -139,6 +123,11 @@ export function FraudNetwork() {
                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-warning"></div> High Risk</div>
                  <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-[#eab308]"></div> Monitored</div>
               </div>
+              <div className="absolute top-4 right-4 flex gap-4 bg-background/80 p-3 rounded-lg border backdrop-blur-sm text-xs font-medium shadow-sm">
+                 <div className="flex items-center gap-2 font-bold text-destructive">
+                   <Network className="w-4 h-4" /> Unified Engine Network Risk: {networkRiskScore}/100
+                 </div>
+              </div>
            </CardContent>
         </Card>
 
@@ -163,19 +152,19 @@ export function FraudNetwork() {
               <div className="space-y-3">
                  <div className="flex justify-between py-2 border-b">
                     <span className="text-sm text-muted-foreground">Entity ID</span>
-                    <span className="text-sm font-mono">#{activeNode.id.padStart(4, '0')}</span>
+                    <span className="text-sm font-mono">{activeNode.details?.id || `#${activeNode.id.padStart(4, '0')}`}</span>
                  </div>
                  <div className="flex justify-between py-2 border-b">
                     <span className="text-sm text-muted-foreground">Total Inflow</span>
-                    <span className="text-sm font-semibold">₹1,45,000</span>
+                    <span className="text-sm font-semibold">{activeNode.details?.inflow || "N/A"}</span>
                  </div>
                  <div className="flex justify-between py-2 border-b">
                     <span className="text-sm text-muted-foreground">Total Outflow</span>
-                    <span className="text-sm font-semibold">₹97,000</span>
+                    <span className="text-sm font-semibold">{activeNode.details?.outflow || "N/A"}</span>
                  </div>
                  <div className="flex justify-between py-2 border-b">
-                    <span className="text-sm text-muted-foreground">Connected Wallets</span>
-                    <span className="text-sm font-semibold">14</span>
+                    <span className="text-sm text-muted-foreground">Direct Relationships</span>
+                    <span className="text-sm font-semibold">{edges.filter(e => e.source === activeNode.id || e.target === activeNode.id).length}</span>
                  </div>
               </div>
 
@@ -185,7 +174,7 @@ export function FraudNetwork() {
                     <AlertTriangle className="w-4 h-4" /> Patient Zero
                   </div>
                   <p className="text-xs leading-relaxed">
-                    This account is the origin of the current ScamShield investigation (SCM-2048). Funds were manipulated from this legitimate customer account.
+                    This account is the origin of the current ScamShield demonstration investigation ({demonstrationCase.caseId}). Funds were manipulated from this legitimate customer account.
                   </p>
                 </div>
               )}
@@ -196,7 +185,7 @@ export function FraudNetwork() {
                     <Network className="w-4 h-4" /> Syndicate Hub
                   </div>
                   <p className="text-xs leading-relaxed">
-                    This entity acts as a central mixing node, consolidating stolen funds before distributing them to offshore accounts. High priority for freezing.
+                    This demonstration entity acts as a central mixing node, consolidating stolen funds before distributing them to offshore accounts. High priority for freezing.
                   </p>
                 </div>
               )}

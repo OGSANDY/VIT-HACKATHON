@@ -9,10 +9,11 @@ export function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-transparent flex flex-col">
       <header className="px-8 py-6 flex items-center justify-between z-10 relative">
         <div className="flex items-center gap-3 text-primary font-bold text-2xl tracking-tight">
-          <img src="/logo.png" alt="ScamShield" className="h-10 object-contain" />
+          <ShieldCheck className="h-10 w-10 text-primary" />
+          ScamShield
         </div>
         <div className="flex gap-4">
           <Button variant="ghost" className="text-foreground">About</Button>
